@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from airport.api.models import Airport, Flight
+from airport.api.models import Airport, Flight, Aircraft
 from airport.api.serializers import UserSerializer, AirportSerializer, FlightSerializer, PassengerSerializer, \
     TicketSerializer, AircraftTypesSerializer, AircraftSerializer
 from rest_framework.views import APIView
@@ -13,6 +13,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from django.http import Http404
 from json import JSONEncoder
+
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -52,8 +53,15 @@ class Flights(ListAPIView):
 
         return queryset_list
 
+    def post(self, request):
+        serializer = FlightSerializer(data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.data, status = status.HTTP_400_BAD_REQUEST)
 
-class Aircraft(ListAPIView):
+
+class Aircrafts(ListAPIView):
     serializer_class = AircraftSerializer
 
     def get_queryset(self, *args, **kwargs):
