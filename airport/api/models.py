@@ -22,7 +22,7 @@ class Airport(models.Model):
 
 
 class Flight(models.Model):
-    flightNumber = models.CharField(max_length=15, blank=False, default="")
+    flightNumber = models.CharField(max_length=15, blank=False, primary_key=True, default="")
     airport = models.ForeignKey(Airport, on_delete=models.CASCADE, related_name='airports', blank=False)
     aircraft = models.ForeignKey(AircraftTypes,on_delete=models.CASCADE, related_name='flight',  blank=False)
     departureDateTime = models.DateTimeField(null=False)
